@@ -1,3 +1,4 @@
+
 .tw-followCard {
     display: flex;
     align-items: center;
@@ -33,9 +34,27 @@
     border-radius: 999px;
     padding: 6px 16px;
     font-weight: bold;
+    width: 140px;
+}
+
+.tw-followCard-stopFollow{
+    display: none;
 }
 
 .tw-followCard-button:hover {
     background-color: #9fc6f4;
     transition: .3s ease background-color;
+}
+
+.is-following:hover {
+    background-color: rgba(214, 55, 55, 0.2);
+    color: rgb(214, 55, 55);
+    border: 2px solid rgb(214, 55, 55);
+
+    .tw-followCard-stopFollow{
+        display: block;
+    }
+    .tw-followCard-text{
+        display: none;
+    }
 }
