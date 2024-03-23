@@ -1,12 +1,15 @@
+
 // eslint-disable-next-line react/prop-types
 function ListOfMovies({ movies }) {
     return (
         <ul className='movies'>
             {/* eslint-disable-next-line react/prop-types */}
             {movies.map((movie) => (
-                <li key={movie.id}>
-                    <h2>{movie.title}</h2>
-                    <p>{movie.year}</p>
+                <li className="movie" key={movie.id}>
+                    <hgroup>
+                        <h2>{movie.title}</h2>
+                        <h3>{movie.year}</h3>
+                    </hgroup>
                     <img src={movie.poster} alt={movie.title} />
                 </li>
             ))}
