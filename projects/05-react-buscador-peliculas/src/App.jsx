@@ -1,12 +1,14 @@
 import './App.css'
 import { Movies } from './componens/Movies.jsx'
 import { useMovies } from './Hooks/useMovies.js'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import debounce from 'just-debounce-it'
 
 function useSearch() {
   const [search, updateSearch] = useState('')
   const [error, setError] = useState(null)
   const isFirstInput = useRef(true)
+
 
   useEffect(() => {
     if (isFirstInput.current) {
@@ -35,16 +37,27 @@ function useSearch() {
 
 
 export function App() {
-  const { error, updateSearch, search } = useSearch()
-  const { movies, getMovies, loading } = useMovies({ search })
+  const [sort, setSort] = useState(false)
 
+  const { error, updateSearch, search } = useSearch()
+  const { movies, getMovies, loading } = useMovies({ search, sort })
+
+  const debouncedGetMovies = useCallback(
+    debounce(search => getMovies({ search }), 300)
+    , [getMovies])
+
+  const handleSort = () => {
+    setSort(!sort)
+  }
   const handleSubmit = (event) => {
     event.preventDefault()
-    getMovies()
+    getMovies({ search })
   }
 
   const handleChange = (event) => {
-    updateSearch(event.target.value)
+    const newSearch = event.target.value
+    updateSearch(newSearch)
+    debouncedGetMovies(newSearch)
   }
 
   return (
@@ -55,6 +68,10 @@ export function App() {
           <label>
             Introduce la película que estas buscando
             <input name='query' value={search} onChange={handleChange} type="text" placeholder='Jumper, Solo en casa, Jumanji..' />
+          </label>
+          <label>
+            Ordenar por título
+            <input type='checkbox' name='sort' onChange={handleSort} checked={sort} />
           </label>
           {error && <p style={{ color: 'red' }} >{error}</p>}
           <button type='submit' disabled={error ? true : false}>Buscar</button>
