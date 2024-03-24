@@ -35,12 +35,12 @@ function useSearch() {
 
 
 export function App() {
-  const { movies } = useMovies()
   const { error, updateSearch, search } = useSearch()
+  const { movies, getMovies, loading } = useMovies({ search })
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    console.log({ search })
+    getMovies()
   }
 
   const handleChange = (event) => {
@@ -57,12 +57,13 @@ export function App() {
             <input name='query' value={search} onChange={handleChange} type="text" placeholder='Jumper, Solo en casa, Jumanji..' />
           </label>
           {error && <p style={{ color: 'red' }} >{error}</p>}
-          <button type='submit'>Buscar</button>
+          <button type='submit' disabled={error ? true : false}>Buscar</button>
         </form>
       </header>
       <main>
-        <Movies movies={movies} />
-      </main>
+        {loading ? <p>Cargando..</p> : <Movies movies={movies} />}
+
+      </main> 
     </>
   )
 }
